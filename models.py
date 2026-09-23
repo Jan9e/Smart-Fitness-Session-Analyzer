@@ -114,26 +114,25 @@ class Session:
         return (f"session(participant={self.participant.participant_id}, "
                 f"valid={self.valid_count}, rejected={self.rejected_count})")
 
+class SessionReport:
+    def __init__(self, session, summaries, classification, reason):
+        self.session = session
+        self.summaries = summaries
+        self.classification = classification
+        self.reason = reason
 
-if __name__ == "__main__":
-    from data_generator import generate_fitness_data
+    def to_dict(self):
+        return {
+            "participant_id": self.session.participant.participant_id,
+            "total_count": self.summaries["total_count"],
+            "valid_count": self.summaries["valid_count"],
+            "rejected_count": self.summaries["rejected_count"],
+            "average_heart_rate": self.summaries["average_heart_rate"],
+            "average_activity": self.summaries["average_activity"],
+            "classification": self.classification,
+            "reason": self.reason,
+        }
 
-    profile, raw_obs = generate_fitness_data(
-        participant_id="P001",
-        scenario="moderate_activity",
-        seed=42,
-        number_of_windows=8,
-    )
-
-    participant = Participant.from_dict(profile)
-    session = Session(participant)
-    for raw in raw_obs:
-        session.add_observation(Observation.from_dict(raw))
-
-    print(session)
-    print("Valid observations:")
-    for obs in session.valid_observations:
-        print("  ", obs)
-    print("Rejected observations:")
-    for obs in session.rejected_observations:
-        print("  ", obs, "|", obs.issues)
+    def __repr__(self):
+        return (f"SessionReport({self.session.participant.participant_id}, "
+                f"{self.classification})")
