@@ -76,7 +76,7 @@ def classify_session(session, summaries):
     if avg_act > 0.65 and avg_hr > baseline_hr + 40:
         return "high activity", (
             f"high activity ({avg_act:.2f}) or heart rate well above baseline "
-            f"({avg_hr:.0f} vd {baseline_hr} bpm)"
+            f"({avg_hr:.0f} vs {baseline_hr} bpm)"
         )
 
     return "moderate activity", (
